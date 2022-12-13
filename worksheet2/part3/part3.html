@@ -1,0 +1,63 @@
+<!doctype html>
+
+<head>
+</head>
+
+<body>
+    <canvas id="gl-canvas" width="500" height="500" style="border: 1px solid;">
+  <!-- The following message is displayed if the browser doesn’t support HTML5 -->
+  Web browser does not support HTML5’s canvas element.
+</canvas>
+    <div>
+        <label for="drawingMode">Select the mode you want to draw in:</label>
+        <br>
+        <select id="drawingMode">
+            <option value="0">Point Mode</option>
+            <option value="1">Triangle Mode</option>
+        </select>
+        <br>
+        <label for="pointColor" style="vertical-align: top;">Choose a color for the element:</label>
+        <br>
+        <select id="pointColor">
+        <option value="0" selected>Black</option>
+        <option value="1" >Red</option>
+        <option value="2" >Yellow</option>
+        <option value="3" >Green</option>
+        <option value="4" >Blue</option>
+        <option value="5" >Magenta</option>
+        <option value="6" >Cayan</option>
+        <option value="7" >White</option>
+        <option value="8" >Cornflower</option>
+    </select>
+        <br>
+        <label for="canvasColor" style="vertical-align: top;">Choose a color for the canvas:</label>
+        <br>
+        <select id="canvasColor">
+        <option value="0" >Black</option>
+        <option value="1" >Red</option>
+        <option value="2" >Yellow</option>
+        <option value="3" >Green</option>
+        <option value="4" >Blue</option>
+        <option value="5" >Magenta</option>
+        <option value="6" >Cayan</option>
+        <option value="7" >White</option>
+        <option value="8" selected>Cornflower</option>
+    </select>
+        <br>
+        <button id="clearButton">Clear Canvas</button>
+
+    </div>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec2 a_Position; attribute vec4 a_Color; varying vec4 color; void main() { gl_Position = vec4(a_Position, 0.0, 1.0); gl_PointSize = 10.0; color = a_Color; }
+
+
+
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float; varying vec4 color; void main() { gl_FragColor = color; }
+    </script>
+    <script src="/worksheet2/webgl-utils.js" type="text/javascript"></script>
+    <script src="/worksheet2/initShaders.js" type="text/javascript"></script>
+    <script src="/worksheet2/MV.js" type="text/javascript"></script>
+    <script src="/worksheet2/part3/part3.js" type="text/javascript"></script>
+</body>

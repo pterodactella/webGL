@@ -1,0 +1,64 @@
+<!doctype html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 4 part 4 </title>
+</head>
+
+<body>
+    <canvas id="webgl" width="500" height="500">
+    Please use a browser that supports "canvas"
+    </canvas>
+    <br>
+    <div class="slidecontainer" id="ambientContainer">
+        <p>Ambient Light:</p>
+        <input type="range" min="0.1" max="100.0" value="0.2" class="slider" id="ambient">
+    </div>
+    <div class="slidecontainer" id="diffuseContainer">
+        <p>Diffuse Light:</p>
+        <input type="range" min="0.1" max="100.0" value="1.0" class="slider" id="diffuse">
+    </div>
+    <div class="slidecontainer" id="specularContainer">
+        <p>Specular Light:</p>
+        <input type="range" min="0.1" max="100.0" value="1.0" class="slider" id="specular">
+    </div>
+    <div class="slidecontainer" id="backAmbientContainer">
+        <p>Back Ambient:</p>
+        <input type="range" min="0.1" max="100.0" value="0.33" class="slider" id="backAmbient">
+    </div>
+    <div class="slidecontainer" id="backDiffuseContainer">
+        <p>Back Diffuse:</p>
+        <input type="range" min="0.1" max="100.0" value="0.1" class="slider" id="backDiffuse">
+    </div>
+    <div class="slidecontainer" id="backSpecularContainer">
+        <p>Back Diffuse:</p>
+        <input type="range" min="0.1" max="100.0" value="1.0" class="slider" id="backSpecular">
+    </div>
+    <div class="slidecontainer" id="shininessContainer">
+        <p>Shininess:</p>
+        <input type="range" min="0.1" max="100.0" value="10.8" class="slider" id="shininess">
+    </div>
+
+    <!-- <button id="incrementButton" type="button"> Increment the subdivision </button>
+    <button id="decrementButton" type="button"> Decrement the subdivision </button> -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        precision mediump float; attribute vec4 vertex_Position; attribute vec4 vertex_Color; varying vec4 fColor; uniform mat4 modelView; uniform mat4 projection; uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct; uniform vec4 LightPosition; uniform
+        float Shininess; attribute vec4 Normal; void main() { vec3 L, E, H, N; vec4 ambient, diffuse, specular; N = normalize((modelView * Normal).xyz); if(LightPosition.w == 0.0){ L = normalize(LightPosition.xyz); } else{ L = (LightPosition.xyz - (modelView
+        * vertex_Position).xyz); }; diffuse = max(dot(L,N), 0.0) * DiffuseProduct; E = - normalize(modelView * vertex_Position).xyz; H = normalize(L * E); specular = pow(max(dot(N, H), 0.0), Shininess)*SpecularProduct; if (dot(L, N)
+        < 0.0) { specular=vec4(0.0, 0.0, 0.0, 1.0); } gl_Position=projection * modelView * vertex_Position; fColor=ambient + diffuse + specular; fColor.a=1.0; } </script>
+
+            <script id="fragment-shader" type="x-shader/x-fragment">
+                precision mediump float; varying vec4 fColor; void main(){ gl_FragColor = fColor; }
+            </script>
+
+
+
+            <script src="/worksheet4/part4/part4.js" type="text/javascript"></script>
+            <script src="/worksheet2/webgl-utils.js" type="text/javascript"></script>
+            <script src="/worksheet2/initShaders.js" type="text/javascript"></script>
+            <script src="/worksheet2/MV.js" type="text/javascript"></script>
+            <!-- <script src="/worksheet2/cuon-utils.js" type="text/javascript"></script> -->
+            <!-- <script src="/worksheet2/webgl-debug.js" type="text/javascript"></script> -->
+            <script src="/worksheet2/cuon-matrix.js" type="text/javascript"></script>
+
+</body>

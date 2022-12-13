@@ -1,0 +1,7 @@
+Reflect on the theory of affine transformations and viewing transformations by doing the following:
+
+1. List the transformation matrices that you used in Parts 1 and 2 (use general expressions rather than concrete numbers).
+A transformation Matrix is a matrix that is in charge of rotating, scaling and translating the object on a given plane.
+In part one the main transformation we made was to shift the perspective so it will become an Orthographic perspective. using the default projection matrix which is an identity matrix.
+
+In part two we had multiple transformation matrix, first we have the projection matrix (that mimics the effect of a typical camera), then we have the translation matrix that helps us position the cube on the plane and we have the scale matrix  scales the matrix

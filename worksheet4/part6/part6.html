@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>Worksheet 4 Part 6 - Theory Questions </title>
+</head>
+
+<body>
+    <h4>1. What is the difference between Phong shading and Phong lighting (the phong reflection model)?</h4>
+    <!-- <br> -->
+    <p>Phong shading model works by interpolating the normal vectors across each polygon and computes the color per pixel, while the Phong reflection model gives us a spectral highlight (a shiny spot) on our drawn object.</p>
+    <h4>2. What is the difference between flat shading, Gouraud shading and Phong shading? List pros and cons of each. Is Gouraud or Phong shading the best method for simulating highlights?</h4>
+    <p>The flat shading is the simplest shading model and yields the same value for all the pixels across the polygon. <br> The Gouraud shading model linearly interpolates intensity values across the surface in order to achieve a smoother shading.
+        <br> Phong shading is the most complex shading model as it interpolates data across each polygon and computes the shading per pixel.
+        <h6>Pros Flat Shading</h6>
+        <li>
+            Fast and simple implementation
+        </li>
+        <h6>Cons Flat Shading</h6>
+        <li>At the border of the polygon it discontinues as it computes the same shading for the entire polygon</li>
+        <li>It does't show an accurate image of a shaded polygon</li>
+        <h6>Pros Gouraud Shading</h6>
+        <li>It's more accurate than the flat shading model</li>
+        <li>It's Less computationally expensive than Phon shading model</li>
+        <li>Intensities for the polygons are matched with the values of adjacent polygons along the common edges which solves the border discontinuity caused by the flat shading model.</li>
+        <h6>Cons Gouraud Shading</h6>
+        <li>It's not very accurate on a curved surface</li>
+        <li>Can cause the match band effect</li>
+        <h6>Pros Phong Shading</h6>
+        <li>It gives a more realistic and accurate shading and does not create shadows or reflections</li>
+        <li>Removes discontinuity at the edges between polygons </li>
+        <li>High quality, narrow specularities</li>
+        <h6>Cons Phong Shading</h6>
+        <li>Computationally expensive</li>
+        <br> Out of the three descrived shading models the best in terms of accuracy is Phong shading as it gives the best quality and accuracy for the shading. However it it very costly in terms of computation.
+
+
+    </p>
+    <h4>3. What is the difference between a directional light and a point light?</h4>
+    <p>A directional light is an infinity ray of light distributed in a given direction in other words it mimics the light that we get from the sun while a point light it's a light source that emits lights in all direction and it can be compared to the light
+        we get from a light bulb, thus objects closer to the light will be brighter.</p>
+
+    <h4>4. Does the eye position influence the shading of an object in any way?</h4>
+    <p>It would only influence the shading of an object when using the Phong shading model and changing it will change the pixel colors.</p>
+
+    <h4>5. What is the effect of setting the specular term to (0,0,0)?</h4>
+    <p>The specular light is the light that appears as a bright spot on shiny objects, thus setting it to (0,0,0) (which in RGB is black) it will make the spot dissappear, thus the object will have no reflective shine</p>
+
+    <h4>6. What is the effect of increasing the shininess exponent></h4>
+    <p>The object will have it's shine increased till it reaches the mirror effect</p>
+
+    <h4>7. In what coordinate space did you compute the lighting? </h4>
+    <p>In the view space (all objects are in relation to the viewer).</p>
+
+</body>
+
+</html>
