@@ -10,45 +10,6 @@
     Please use a browser that supports "canvas"
     </canvas>
     <br>
-    <!-- I had to simplify the shaders code because i couldn't make this one work properly -->
-    <!-- <script id="vertex-shader" type="x-shader/x-vertex">
-        precision mediump float; 
-        attribute vec4 vertex_Position;
-        attribute vec4 vertex_Color; 
-        varying vec4 fColor; 
-        uniform mat4 modelView; 
-        uniform mat4 projection; 
-        uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct; 
-        uniform vec4 LightPosition; 
-        uniform float Shininess; 
-        attribute vec4 Normal; 
-        void main() { 
-            vec3 L, E, H, N; 
-            vec4 ambient, diffuse, specular;
-            N = normalize((modelView * Normal).xyz); 
-            if(LightPosition.w == 0.0){ 
-                L = normalize(LightPosition.xyz); 
-            } else{ 
-                L = (LightPosition.xyz - (modelView * vertex_Position).xyz); 
-            }; 
-            diffuse = max(dot(L,N), 0.0) * DiffuseProduct;
-            E = - normalize(modelView * vertex_Position).xyz; 
-            H = normalize(L * E); 
-            specular = pow(max(dot(N, H), 0.0), Shininess)*SpecularProduct; 
-            if (dot(L, N) < 0.0) { 
-                specular=vec4(0.0, 0.0, 0.0, 1.0); 
-            } 
-            gl_Position=projection * modelView * vertex_Position;
-            fColor=ambient + diffuse + specular; fColor.a=1.0; } </script>
-
-            <script id="fragment-shader" type="x-shader/x-fragment">
-                precision mediump float; 
-                varying vec4 fColor; 
-                void main(){ 
-                    gl_FragColor = fColor; }
-            </script> -->
-
-
     <script id="vertex-shader" type="x-shader/x-vertex">
         precision mediump float; attribute vec4 aPosition; varying vec4 modelView, projection; uniform mat4 p; void main() { modelView = aPosition; projection = p * aPosition; gl_Position = p * aPosition; } </script>
 

@@ -31,12 +31,23 @@ var tetrahedronVertices = [
     [-0.816497, -0.471405, -0.333333],
     [0.816497, -0.471405, -0.333333]
 ]
+
+var backgroundQuad = [
+    [-1.0, -1.0, 0.999],
+    [1.0, -1.0, 0.999],
+    [1.0, 1.0, 0.999],
+    [-1.0, -1.0, 0.999],
+    [1.0, 1.0, 0.999],
+    [-1.0, 1.0, 0.999]
+];
+
+
 var vertexLocation;
 var normalLocation;
 var theta = 0.0;
 
-function init() {
 
+function init() {
     canvas = document.getElementById("webgl");
     gl = WebGLUtils.setupWebGL(canvas);
 
@@ -49,42 +60,31 @@ function init() {
     gl.enable(gl.CULL_FACE);
 
 
-
     program = initShaders(gl, 'vertex-shader', 'fragment-shader');
     gl.useProgram(program);
 
-    var positions = [].concat(tetrahedron(7, tetrahedronVertices));
-    var normals = [].concat(tetrahedron(7, tetrahedronVertices));
+
+    var positions = [].concat(backgroundQuad, tetrahedron(7, tetrahedronVertices));
     var modelViewLoc = gl.getUniformLocation(program, "modelView");
     var projectionLoc = gl.getUniformLocation(program, "projection");
     gl.getUniformLocation(program, "u_texture");
+
+
+
+    var projectionMatrix = perspective(90, canvas.width / canvas.height, 1, 100);
+    var viewMatrix = mult(lookAt(vec3(2.0 * Math.sin(theta * Math.PI / 180.0), 2.0 * Math.sin(0.0 * Math.PI / 180.0), 2.0 * Math.cos(theta * Math.PI / 180.0)), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0)), scalem(1.0, 1.0, 1.0));
+
 
     var programInfo = {
         aPosition: {
             buffer: gl.createBuffer()
         },
-        aNormal: {
-            buffer: gl.createBuffer()
-        },
     };
 
-
-
     vertexLocation = gl.getAttribLocation(program, 'aPosition');
-    normalLocation = gl.getAttribLocation(program, 'aNormal')
-
 
     gl.bindBuffer(gl.ARRAY_BUFFER, programInfo.aPosition.buffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(positions), gl.STATIC_DRAW);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, programInfo.aNormal.buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(normals), gl.STATIC_DRAW);
-
-
-    var projectionMat = perspective(90, canvas.width / canvas.height, 1, 100);
-    var modelViewMat = mult(lookAt(vec3(2.0 * Math.sin(theta * Math.PI / 180.0), 2.0 * Math.sin(0.0 * Math.PI / 180.0), 2.0 * Math.cos(theta * Math.PI / 180.0)), vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0)), scalem(1.0, 1.0, 1.0));
-    gl.uniformMatrix4fv(projectionLoc, false, flatten(projectionMat));
-    gl.uniformMatrix4fv(modelViewLoc, false, flatten(modelViewMat));
 
     var sphereTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, sphereTexture);
@@ -102,27 +102,31 @@ function init() {
         gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
     ];
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, programInfo.aPosition.buffer);
+    gl.enableVertexAttribArray(programInfo.aPosition.location);
+    gl.vertexAttribPointer(programInfo.aPosition.location, 3, gl.FLOAT, false, 0, 0);
+
     for (var i = 0; i < orient.length; i++) {
         gl.bindTexture(gl.TEXTURE_CUBE_MAP, sphereTexture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.texImage2D(orient[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i]);
     }
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, programInfo.aPosition.buffer);
-    gl.enableVertexAttribArray(vertexLocation);
-    gl.vertexAttribPointer(vertexLocation, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, programInfo.aNormal.buffer);
-    gl.enableVertexAttribArray(normalLocation);
-    gl.vertexAttribPointer(normalLocation, 3, gl.FLOAT, false, 0, 0);
 
     requestAnimationFrame(function render() {
+
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLES, 0, positions.length);
+        gl.uniformMatrix4fv(modelViewLoc, false, flatten(mat4()));
+        gl.uniformMatrix4fv(projectionLoc, false, flatten(mult(inverse4(viewMatrix), inverse4(projectionMatrix))));
+        gl.drawArrays(gl.TRIANGLES, 0, backgroundQuad.length);
+        gl.uniformMatrix4fv(modelViewLoc, false, flatten(mult(projectionMatrix, viewMatrix)));
+        gl.uniformMatrix4fv(projectionLoc, false, flatten(mat4()));
+        gl.drawArrays(gl.TRIANGLES, backgroundQuad.length, positions.length - backgroundQuad.length);
     })
 
 
 }
+
 
 function divide_triangle(points, n, a, b, c) {
     if (n > 0) {
@@ -153,7 +157,6 @@ function tetrahedron(n, tetrahedronVertices) {
     divide_triangle(points, n, a, c, d);
     return points;
 }
-
 
 function triangle(points, a, b, c) {
 
